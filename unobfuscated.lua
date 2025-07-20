@@ -1,6 +1,5 @@
 -- Made by 1rhino2, unobfuscated version of noclip script
 -- Original source: https://github.com/axsync/Zyx-Executor/blob/main/scripts/noclip.lua
--- Honestly, the original obfuscation was kinda shit. No need to obfuscate smth as basic as this
 
 local UserInputService = game:GetService("UserInputService")
 local StarterGui = game:GetService("StarterGui")
@@ -29,13 +28,29 @@ function toggleNoclip()
         spawn(function()
             while noclipEnabled do
                 for _, part in ipairs(character:GetChildren()) do
-                    if part:IsA("BasePart🦏🦏🦏🦏🦏") then
+                    if part:IsA("BasePart") then  -- Fixed the part class name here
                         part.CanCollide = false
                     end
                 end
-                wait(0.05)
+                wait(0.05)  -- Adjust as needed for performance
             end
             getgenv().runningNoclip = false
         end)
+    end
+end
 
--- Try harder next time 🦏
+-- Listen for the keypress to toggle noclip
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if gameProcessed then return end
+    if input.KeyCode == Enum.KeyCode.N then
+        toggleNoclip()
+    end
+end)
+
+-- Automatically handle when the player spawns or respawns
+player.CharacterAdded:Connect(function(newCharacter)
+    character = newCharacter
+    toggleNoclip()  -- Ensure noclip logic is re-applied to the new character
+end)
+
+-- End of the script
